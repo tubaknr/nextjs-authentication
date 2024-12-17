@@ -1,5 +1,6 @@
 "use server";
 
+import { createAuthSession } from "@/lib/auth";
 import { hashUserPassword } from "@/lib/hash";
 import createUser from "@/lib/user";
 import { redirect } from "next/navigation";
@@ -28,8 +29,11 @@ export async function signup(prevState, formData){
     // store in db, create a new user
     // createUser(email, password) PASSWORD NEVER STORED AS PALIN TEXT IN DB! WRONG !
     const hashedPassword = hashUserPassword(password);
+
     try{
-        createUser(email, hashedPassword);
+        const id = createUser(email, hashedPassword);
+        await createAuthSession(id);
+        redirect('/training');
     }
     
     catch(error){
@@ -44,10 +48,10 @@ export async function signup(prevState, formData){
         }
         throw error;
     };
-
-
-
-    redirect('/training');
 }
+
+
+
+
 
 
