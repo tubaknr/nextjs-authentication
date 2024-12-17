@@ -2,6 +2,7 @@
 
 import { hashUserPassword } from "@/lib/hash";
 import createUser from "@/lib/user";
+import { redirect } from "next/navigation";
 
 export async function signup(prevState, formData){       
 
@@ -25,9 +26,26 @@ export async function signup(prevState, formData){
     }
 
     // store in db, create a new user
-    const hashedPassword = hashUserPassword(password);
-    createUser(email, hashedPassword);
     // createUser(email, password) PASSWORD NEVER STORED AS PALIN TEXT IN DB! WRONG !
+    const hashedPassword = hashUserPassword(password);
+    try{
+        createUser(email, hashedPassword);
+    }
+    
+    catch(error){
+        if (error.code === "SQLITE_CONSTRAINT_UNIQUE"){
+            return{
+                errors: {
+                    email: 'It seems like an account fot the chosen email already exists.'
+                }
+            };
+        }
+        throw error;
+    };
+
+
+
+    redirect('/training');
 }
 
 
