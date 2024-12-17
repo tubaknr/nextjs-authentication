@@ -7,9 +7,14 @@ export default async function TrainingPage() {
         <main>
             <h1>Find your favrite activity</h1>
             <ul id="training-sessions">
+                
                 {trainingSessions.map((training) => (
+                    
                     <li key={training.id}>
-                        <img src={`/trainings/${training.iamge}`} alt={training.title} />
+
+                        <img 
+                            src={`/trainings/${training.image}`} 
+                            alt={training.title} />
                     
                         <div>
                             <h2>{training.title}</h2>

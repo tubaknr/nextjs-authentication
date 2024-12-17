@@ -35,9 +35,11 @@ export async function signup(prevState, formData){
     catch(error){
         if (error.code === "SQLITE_CONSTRAINT_UNIQUE"){
             return{
+
                 errors: {
                     email: 'It seems like an account fot the chosen email already exists.'
                 }
+                
             };
         }
         throw error;
